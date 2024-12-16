@@ -25,7 +25,7 @@ jobs:
       ProjectPath: "ironpython2/Src/IronPython.csproj"
       ProjectDirectory: "ironpython2/Src"
       PackageOutputRootDir: "D:\\a\\ironpython2\\Src\\AppPackages"
-      PackageOutputDir: "D:\\a\\ironpython2\\Src\\Xbox Python"
+      ArchiveFile: "Py_Archive.zip"
 
     steps:
       - name: Checkout Repository
@@ -70,10 +70,11 @@ jobs:
 
       - name: Create Archive
         run: |
-          $PackagePath = "${env:PackageOutputRootDir}"
+          $PackagePath = "${env:PackageOutputRootDir}\${{ env.PACKAGE_NAME }}"
+          $ArchivePath = "${env:PackageOutputRootDir}\${env:ArchiveFile}"
           if (Test-Path $PackagePath) {
             Write-Host "Creating archive for: $PackagePath"
-            Compress-Archive -Path "$PackagePath\*" -DestinationPath "${env:PackageOutputRootDir}\Pacman_Archive.zip"
+            Compress-Archive -Path "$PackagePath\*" -DestinationPath $ArchivePath
             Write-Host "Contents of package output directory after archiving:"
             Get-ChildItem -Path "${env:PackageOutputRootDir}" -Recurse
           } else {
@@ -93,5 +94,3 @@ jobs:
         with:
           name: Py_Archive
           path: D:\a\ironpython2\Src\AppPackages\Py_Archive.zip
-
-          
