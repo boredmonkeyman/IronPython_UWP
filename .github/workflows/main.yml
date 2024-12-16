@@ -24,8 +24,8 @@ jobs:
       AppxBundle: Never
       ProjectPath: "ironpython2/Src/IronPython.csproj"
       ProjectDirectory: "ironpython2/Src"
-      PackageOutputRootDir: "D:\\a\\ironpython2\\Src\\AppPackages"
-      ArchiveFile: "Py_Archive.zip"
+      PackageOutputRootDir: "D:\\a\\ironpython2"
+      PackageOutputDir: "D:\\a\\ironpython2\\Src"
 
     steps:
       - name: Checkout Repository
@@ -70,11 +70,10 @@ jobs:
 
       - name: Create Archive
         run: |
-          $PackagePath = "${env:PackageOutputRootDir}\${{ env.PACKAGE_NAME }}"
-          $ArchivePath = "${env:PackageOutputRootDir}\${env:ArchiveFile}"
+          $PackagePath = "${env:PackageOutputRootDir}"
           if (Test-Path $PackagePath) {
             Write-Host "Creating archive for: $PackagePath"
-            Compress-Archive -Path "$PackagePath\*" -DestinationPath $ArchivePath
+            Compress-Archive -Path "$PackagePath\*" -DestinationPath "${env:PackageOutputRootDir}\Py_Archive.zip"
             Write-Host "Contents of package output directory after archiving:"
             Get-ChildItem -Path "${env:PackageOutputRootDir}" -Recurse
           } else {
@@ -93,4 +92,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Py_Archive
-          path: D:\a\ironpython2\Src\AppPackages\Py_Archive.zip
+          path: D:\a\ironpython2\Src\Py_Archive.zip
+          
